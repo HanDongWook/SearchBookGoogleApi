@@ -12,7 +12,7 @@ class BookMapper : DomainMapper<BookListResponse, Book> {
     override fun mapToDomainModel(entity: BookListResponse): Book {
         return Book(
             entity.totalItems,
-            entity.items.map {
+            (entity.items ?: emptyList<BookInfoResponse>()).map {
                 bookInfoMapper.mapToDomainModel(it)
             }
         )

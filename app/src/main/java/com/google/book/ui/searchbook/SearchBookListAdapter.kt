@@ -2,43 +2,65 @@ package com.google.book.ui.searchbook
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.book.databinding.ViewholderBookItemBinding
-import com.google.book.domain.entities.BookInfo
+import com.google.book.databinding.ViewholderItemProgressbarBinding
 
 internal class SearchBookListAdapter(
     private val context: Context,
     private val listener: BookClickListener
-) : ListAdapter<BookInfo, SearchBookViewHolder>(object :
-    DiffUtil.ItemCallback<BookInfo>() {
-    override fun areItemsTheSame(oldItem: BookInfo, newItem: BookInfo): Boolean {
-        return oldItem.id == newItem.id
+) : ListAdapter<BookItem, BookViewHolder>(object :
+    DiffUtil.ItemCallback<BookItem>() {
+    override fun areItemsTheSame(oldItem: BookItem, newItem: BookItem): Boolean {
+        return oldItem == newItem
     }
 
-    override fun areContentsTheSame(oldItem: BookInfo, newItem: BookInfo): Boolean {
+    override fun areContentsTheSame(oldItem: BookItem, newItem: BookItem): Boolean {
         return oldItem == newItem
     }
 }) {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchBookViewHolder {
-        val binding = ViewholderBookItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return SearchBookViewHolder(context, binding, listener)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookViewHolder {
+        return when (viewType) {
+            BookItemView.Item.type -> {
+                val binding = ViewholderBookItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                SearchBookViewHolder(context, binding, listener)
+            }
+            BookItemView.Loading.type -> {
+                val binding = ViewholderItemProgressbarBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                LoadingViewHolder(binding)
+            }
+            else -> throw IllegalStateException("Unknown view")
+        }
     }
 
-    override fun onBindViewHolder(holder: SearchBookViewHolder, position: Int) {
-        holder.bindTo(getItem(position))
+    override fun onBindViewHolder(holder: BookViewHolder, position: Int) {
+        getItem(position)?.let { holder.bindTo(it) }
     }
+
+    override fun getItemViewType(position: Int): Int {
+        return when (getItem(position)) {
+            is BookItem.Item -> BookItemView.Item.type
+            is BookItem.Loading -> BookItemView.Loading.type
+        }
+    }
+}
+
+abstract class BookViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    abstract fun bindTo(b: BookItem)
 }
 
 internal class SearchBookViewHolder(
     private val context: Context,
     private val binding: ViewholderBookItemBinding,
     private val listener: BookClickListener
-) : RecyclerView.ViewHolder(binding.root) {
-    fun bindTo(item: BookInfo) {
+) : BookViewHolder(binding.root) {
+    override fun bindTo(b: BookItem) {
+        val item = (b as BookItem.Item).info
         with(binding) {
             title.text = item.volumeInfo.title
             author.text = item.volumeInfo.authors.joinToString(", ")
@@ -54,6 +76,10 @@ internal class SearchBookViewHolder(
             }
         }
     }
+}
+
+internal class LoadingViewHolder(binding: ViewholderItemProgressbarBinding) : BookViewHolder(binding.root) {
+    override fun bindTo(b: BookItem) {}
 }
 
 interface BookClickListener {

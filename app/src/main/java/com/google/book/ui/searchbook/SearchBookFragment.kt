@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.book.R
 import com.google.book.base.BaseFragment
 import com.google.book.databinding.FragmentSearchBookBinding
@@ -36,7 +37,7 @@ internal class SearchBookFragment : BaseFragment<FragmentSearchBookBinding, Sear
     }
 
     private fun initViews() {
-        searchBookListAdapter = SearchBookListAdapter(requireContext(), object : BookClickListener{
+        searchBookListAdapter = SearchBookListAdapter(requireContext(), object : BookClickListener {
             override fun onClick(bookId: String) {
                 vm.onBookClick(bookId)
             }
@@ -45,6 +46,19 @@ internal class SearchBookFragment : BaseFragment<FragmentSearchBookBinding, Sear
         binding.rcBookList.apply {
             adapter = searchBookListAdapter
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(rv: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(rv, dx, dy)
+
+                    val lastVisibleItemPosition = (rv.layoutManager as LinearLayoutManager?)!!.findLastCompletelyVisibleItemPosition()
+                    val itemTotalCount = rv.adapter!!.itemCount
+
+                    if (!rv.canScrollVertically(1) && (lastVisibleItemPosition + 1) == itemTotalCount && itemTotalCount != 0) {
+                        if (itemTotalCount < vm.getResultCount()) vm.loadMore()
+                        else showSnackBar(binding.layout, resources.getString(R.string.last_item))
+                    }
+                }
+            })
         }
 
         binding.searchBar.addTextChangedListener(object : TextWatcher {
@@ -68,12 +82,28 @@ internal class SearchBookFragment : BaseFragment<FragmentSearchBookBinding, Sear
                 )
             }
         })
+
+        binding.iconSearch.setOnClickListener {
+            val text = binding.searchBar.text.toString().trim()
+            if (text.isNotBlank()) vm.fetch(text)
+            else showSnackBar(binding.layout, resources.getString(R.string.enter_search_term))
+        }
     }
 
     private fun initViewModel() {
         with(vm) {
             bookList.observe(viewLifecycleOwner) {
-                searchBookListAdapter?.submitList(it)
+                if (it.isEmpty()) {
+                    binding.rcBookList.gone()
+                    binding.results.gone()
+                    if (binding.searchBar.text.toString().isNotBlank()) binding.noResults.visible()
+                } else {
+                    binding.noResults.gone()
+                    binding.results.visible()
+                    binding.rcBookList.visible()
+                    searchBookListAdapter?.submitList(it)
+                    searchBookListAdapter?.notifyDataSetChanged()
+                }
             }
 
             totalCount.observe(viewLifecycleOwner) {
@@ -91,11 +121,12 @@ internal class SearchBookFragment : BaseFragment<FragmentSearchBookBinding, Sear
             }
 
             navigate.observe(viewLifecycleOwner) {
-                when(it) {
+                when (it) {
                     is SearchBookViewModel.Navigate.BookDetail -> {
-                        val action = SearchBookFragmentDirections.actionSearchBookFragmentToBookDetailFragment(
-                            it.bookId
-                        )
+                        val action =
+                            SearchBookFragmentDirections.actionSearchBookFragmentToBookDetailFragment(
+                                it.bookId
+                            )
                         findNavController().navigate(action)
                     }
                 }

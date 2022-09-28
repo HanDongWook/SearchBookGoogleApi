@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
+import com.google.book.R
 import com.google.book.base.BaseFragment
 import com.google.book.databinding.FragmentBookDetailBinding
 import com.google.book.utils.gone
@@ -38,7 +39,7 @@ internal class BookDetailFragment : BaseFragment<FragmentBookDetailBinding, Book
                 binding.author.text = it.volumeInfo.authors.joinToString(", ")
                 binding.pubDate.text = it.volumeInfo.publishedDate
                 binding.description.text = it.volumeInfo.description
-                binding.language.text = it.volumeInfo.language
+                binding.language.text = resources.getString(R.string.language, it.volumeInfo.language)
 
                 Glide
                     .with(requireContext())

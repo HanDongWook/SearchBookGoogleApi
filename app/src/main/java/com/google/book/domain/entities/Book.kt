@@ -2,7 +2,7 @@ package com.google.book.domain.entities
 
 data class Book(
     val totalItems: Int,
-    val list: List<BookInfo>
+    val list: List<BookInfo> = emptyList<BookInfo>()
 )
 
 data class BookInfo(

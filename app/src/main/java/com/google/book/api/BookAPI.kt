@@ -9,7 +9,9 @@ import retrofit2.http.Query
 interface BookAPI {
     @GET("volumes/")
     suspend fun getBookList(
-        @Query("q") query: String
+        @Query("q") query: String,
+        @Query("startIndex") startIndex: Int,
+        @Query("maxResults") maxResults: Int
     ): BookListResponse
 
     @GET("volumes/{id}")

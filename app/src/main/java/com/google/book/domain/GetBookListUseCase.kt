@@ -6,7 +6,7 @@ import com.google.book.repository.BookRepository
 internal class GetBookListUseCase(
     private val bookRepository: BookRepository
 ) {
-    suspend operator fun invoke(query: String): Book {
-        return bookRepository.getBookList(query)
+    suspend operator fun invoke(query: String, startIndex: Int, maxResults: Int): Book {
+        return bookRepository.getBookList(query, startIndex, maxResults)
     }
 }

@@ -2,5 +2,8 @@
     <string name="app_name">book</string>
     <string name="results">Results(%s)</string>
     <string name="search_hint">Search for a book</string>
-    <string name="author">Search for a book</string>
+    <string name="no_results">No results were found for your search</string>
+    <string name="last_item">This is the last item</string>
+    <string name="enter_search_term">Please enter your search term</string>
+    <string name="language">language : %s</string>
 </resources>
