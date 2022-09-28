@@ -35,7 +35,7 @@ internal class SearchBookViewModel(
                 val result = getBookListUseCase(query)
                 totalCountLiveData.value = result.totalItems
                 bookListLiveData.value = result.list
-                Log.d("test", "SearchBookViewModel result.totalItems:${result.totalItems} result.list : ${result.list}")
+                Log.d("test", "SearchBookViewModel result.totalItems:${result.totalItems} result.list : ${result.list}\n\n")
             } catch (e: Exception) {
                 error.value = e
             } finally {

@@ -7,7 +7,7 @@ import kotlin.reflect.KClass
 
 class ApiProvider {
     companion object {
-        const val BASE_URL = "https://www.googleapis.com/books/v1/volumes/"
+        const val BASE_URL = "https://www.googleapis.com/books/v1/"
     }
 
     fun <T : Any> create(kClass: KClass<T>): T = Retrofit.Builder()

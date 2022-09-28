@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.google.book.R
 import com.google.book.databinding.ViewholderBookItemBinding
 import com.google.book.domain.entities.BookInfo
 
@@ -47,7 +46,6 @@ internal class SearchBookViewHolder(
             Glide
                 .with(context)
                 .load(item.volumeInfo.imageLinks.smallThumbnail)
-                .error(R.drawable.ic_launcher_foreground)
                 .centerCrop()
                 .into(thumbnail)
 

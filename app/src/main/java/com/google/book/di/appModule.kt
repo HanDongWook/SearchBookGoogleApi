@@ -2,7 +2,6 @@ package com.google.book.di
 
 
 import com.google.book.api.ApiProvider
-import com.google.book.api.model.BookMapper
 import com.google.book.domain.GetBookDetailByIdUseCase
 import com.google.book.domain.GetBookListUseCase
 import com.google.book.repository.BookRepository
@@ -13,9 +12,8 @@ import org.koin.dsl.module
 
 internal val appModule = module {
     //Data Layer
-    single { BookRepository(get(), get()) }
+    single { BookRepository(get()) }
     single { ApiProvider() }
-    single { BookMapper() }
 
     //Domain Layer
     single { GetBookDetailByIdUseCase(get()) }

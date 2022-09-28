@@ -2,7 +2,8 @@ package com.google.book.api.model
 
 import com.google.gson.annotations.SerializedName
 
-data class BookResponse(
+
+data class BookListResponse(
     @SerializedName("totalItems") val totalItems: Int,
     @SerializedName("items") val items: List<BookInfoResponse> = arrayListOf()
 )

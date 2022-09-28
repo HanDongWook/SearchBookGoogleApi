@@ -6,10 +6,10 @@ import com.google.book.domain.entities.ImageLinks
 import com.google.book.domain.entities.VolumeInfo
 import com.google.book.domain.util.DomainMapper
 
-class BookMapper : DomainMapper<BookResponse, Book> {
+class BookMapper : DomainMapper<BookListResponse, Book> {
     private val bookInfoMapper = BookInfoMapper()
 
-    override fun mapToDomainModel(entity: BookResponse): Book {
+    override fun mapToDomainModel(entity: BookListResponse): Book {
         return Book(
             entity.totalItems,
             entity.items.map {
