@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.book.base.BaseViewModel
 import com.google.book.domain.GetBookListUseCase
+import com.google.book.domain.entities.BookInfo
 import com.google.book.utils.SingleLiveEvent
 import kotlinx.coroutines.launch
 
@@ -22,9 +23,9 @@ internal class SearchBookViewModel(
     private val totalCountLiveData = MutableLiveData<Int>()
     val totalCount: LiveData<Int> = totalCountLiveData
 
-    private val list = mutableListOf<BookItem>()
-    private val bookListLiveData = MutableLiveData<List<BookItem>>()
-    val bookList: LiveData<List<BookItem>> = bookListLiveData
+    private val list = mutableListOf<BookInfo>()
+    private val bookListLiveData = MutableLiveData<List<BookInfo>>()
+    val bookList: LiveData<List<BookInfo>> = bookListLiveData
 
     private val queryLiveData = MutableLiveData("")
     private val startIndexLiveData = MutableLiveData<Int>()
@@ -48,10 +49,7 @@ internal class SearchBookViewModel(
                     val result = getBookListUseCase(query, 0, MAX_RESULTS)
 
 
-                    if (result.list.isNotEmpty()) {
-                        val bookList = result.list.map { BookItem.Item(it) }
-                        list.addAll(bookList)
-                    }
+                    if (result.list.isNotEmpty()) list.addAll(result.list)
 
                     bookListLiveData.value = list
                     totalCountLiveData.value = result.totalItems
@@ -83,8 +81,7 @@ internal class SearchBookViewModel(
 
                     val result = getBookListUseCase(queryLiveData.value!!, currentIdx, MAX_RESULTS)
 
-                    val bookList = result.list.map { BookItem.Item(it) }
-                    list.addAll(bookList)
+                    list.addAll(result.list)
 
                     bookListLiveData.value = list
                 } catch (e: Exception) {
