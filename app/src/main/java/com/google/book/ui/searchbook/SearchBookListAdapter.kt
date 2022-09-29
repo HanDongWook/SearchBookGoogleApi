@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.book.R
 import com.google.book.databinding.ViewholderBookItemBinding
 import com.google.book.databinding.ViewholderItemProgressbarBinding
 
@@ -65,11 +66,16 @@ internal class SearchBookViewHolder(
             title.text = item.volumeInfo.title
             author.text = item.volumeInfo.authors.joinToString(", ")
 
-            Glide
-                .with(context)
-                .load(item.volumeInfo.imageLinks.smallThumbnail)
-                .centerCrop()
-                .into(thumbnail)
+            val imgLink = item.volumeInfo.imageLinks.smallThumbnail
+            if (imgLink == null) {
+                thumbnail.setImageResource(R.drawable.book_cover_not_found)
+            } else {
+                Glide
+                    .with(context)
+                    .load(item.volumeInfo.imageLinks.smallThumbnail)
+                    .centerCrop()
+                    .into(thumbnail)
+            }
 
             bookItemLayout.setOnClickListener {
                 listener.onClick(item.id!!)

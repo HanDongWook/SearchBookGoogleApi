@@ -9,7 +9,7 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2375" />
         <entry key="app/src/main/res/layout/fragment_book_detail.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_search_book.xml" value="0.28418230563002683" />
-        <entry key="app/src/main/res/layout/viewholder_book_item.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/viewholder_book_item.xml" value="0.67" />
         <entry key="app/src/main/res/layout/viewholder_item_full_size.xml" value="0.3156498673740053" />
         <entry key="app/src/main/res/layout/viewholder_item_loading.xml" value="0.3489583333333333" />
         <entry key="app/src/main/res/layout/viewholder_item_normal_size.xml" value="0.3489583333333333" />

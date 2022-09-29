@@ -16,13 +16,13 @@ data class BookInfoResponse(
 data class VolumeInfoResponse(
     @SerializedName("title") var title: String? = null,
     @SerializedName("subtitle") var subtitle: String? = null,
-    @SerializedName("authors") var authors: ArrayList<String> = arrayListOf(),
+    @SerializedName("authors") var authors: List<String>? = listOf("Author unknown"),
     @SerializedName("publisher") var publisher: String? = "Publisher details not available",
     @SerializedName("publishedDate") var publishedDate: String? = null,
     @SerializedName("description") var description: String? = "No description found",
     @SerializedName("pageCount") var pageCount: Int? = null,
     @SerializedName("printType") var printType: String? = null,
-    @SerializedName("categories") var categories: ArrayList<String> = arrayListOf(),
+    @SerializedName("categories") var categories: List<String> = arrayListOf(),
     @SerializedName("averageRating") var averageRating: Double? = null,
     @SerializedName("ratingsCount") var ratingsCount: Int? = null,
     @SerializedName("maturityRating") var maturityRating: String? = null,
@@ -36,6 +36,6 @@ data class VolumeInfoResponse(
 )
 
 data class ImageLinksResponse(
-    @SerializedName("smallThumbnail") var smallThumbnail: String? = "https://i.imgur.com/YjoNXCX.png",
-    @SerializedName("thumbnail") var thumbnail: String? = "https://i.imgur.com/YjoNXCX.png"
+    @SerializedName("smallThumbnail") var smallThumbnail: String? = null,
+    @SerializedName("thumbnail") var thumbnail: String? = null
 )

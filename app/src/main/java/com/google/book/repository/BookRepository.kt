@@ -1,5 +1,6 @@
 package com.google.book.repository
 
+import android.util.Log
 import com.google.book.api.ApiProvider
 import com.google.book.api.BookAPI
 import com.google.book.api.model.BookInfoMapper
@@ -18,6 +19,7 @@ internal class BookRepository(
     private val bookInfoMapper = BookInfoMapper()
 
     suspend fun getBookList(query: String, startIndex: Int, maxResults: Int): Book = withContext(Dispatchers.IO) {
+        Log.d("test", "query:$query startIndex:$startIndex")
         val response = bookApi.getBookList(query, startIndex, maxResults)
         return@withContext bookMapper.mapToDomainModel(response)
     }

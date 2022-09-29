@@ -5,6 +5,7 @@ import com.google.book.domain.entities.BookInfo
 import com.google.book.domain.entities.ImageLinks
 import com.google.book.domain.entities.VolumeInfo
 import com.google.book.domain.util.DomainMapper
+import com.google.book.utils.htmlToString
 
 class BookMapper : DomainMapper<BookListResponse, Book> {
     private val bookInfoMapper = BookInfoMapper()
@@ -36,10 +37,10 @@ class VolumeInfoMapper : DomainMapper<VolumeInfoResponse, VolumeInfo> {
         return VolumeInfo(
             entity.title,
             entity.subtitle,
-            entity.authors,
+            entity.authors!!,
             entity.publisher!!,
             entity.publishedDate,
-            entity.description!!,
+            entity.description!!.htmlToString(),
             entity.pageCount,
             entity.printType,
             entity.categories,
@@ -60,8 +61,8 @@ class VolumeInfoMapper : DomainMapper<VolumeInfoResponse, VolumeInfo> {
 class ImageLinksMapper : DomainMapper<ImageLinksResponse, ImageLinks> {
     override fun mapToDomainModel(entity: ImageLinksResponse): ImageLinks {
         return ImageLinks(
-            entity.smallThumbnail!!,
-            entity.thumbnail!!
+            entity.smallThumbnail,
+            entity.thumbnail
         )
     }
 }

@@ -1,5 +1,6 @@
 package com.google.book.ui.searchbook
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -90,6 +91,7 @@ internal class SearchBookFragment : BaseFragment<FragmentSearchBookBinding, Sear
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun initViewModel() {
         with(vm) {
             bookList.observe(viewLifecycleOwner) {

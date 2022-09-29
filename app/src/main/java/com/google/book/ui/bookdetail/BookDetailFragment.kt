@@ -41,11 +41,15 @@ internal class BookDetailFragment : BaseFragment<FragmentBookDetailBinding, Book
                 binding.description.text = it.volumeInfo.description
                 binding.language.text = resources.getString(R.string.language, it.volumeInfo.language)
 
-                Glide
-                    .with(requireContext())
-                    .load(it.volumeInfo.imageLinks.smallThumbnail)
-                    .centerCrop()
-                    .into(binding.thumbnail)
+                val imgLink = it.volumeInfo.imageLinks.smallThumbnail
+                if (imgLink == null) binding.thumbnail.setImageResource(R.drawable.book_cover_not_found)
+                else {
+                    Glide
+                        .with(requireContext())
+                        .load(imgLink)
+                        .centerCrop()
+                        .into(binding.thumbnail)
+                }
             }
 
             error.observe(viewLifecycleOwner) {

@@ -33,6 +33,6 @@ data class VolumeInfo(
 )
 
 data class ImageLinks(
-    var smallThumbnail: String,
-    var thumbnail: String
+    var smallThumbnail: String?,
+    var thumbnail: String?
 )

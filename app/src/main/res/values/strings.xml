@@ -5,5 +5,5 @@
     <string name="no_results">No results were found for your search</string>
     <string name="last_item">This is the last item</string>
     <string name="enter_search_term">Please enter your search term</string>
-    <string name="language">language : %s</string>
+    <string name="language">language(%s)</string>
 </resources>
