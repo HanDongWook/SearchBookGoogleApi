@@ -11,7 +11,7 @@
         android:id="@+id/search_bar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="8dp"
         android:hint="@string/search_hint"
         app:layout_constraintEnd_toStartOf="@+id/icon_search"
         app:layout_constraintStart_toStartOf="parent"
@@ -19,8 +19,8 @@
 
     <ImageView
         android:id="@+id/icon_search"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:src="@drawable/ic__magnifier"
         app:layout_constraintBottom_toBottomOf="@+id/search_bar"
         app:layout_constraintEnd_toEndOf="parent"

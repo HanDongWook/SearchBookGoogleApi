@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -74,6 +75,7 @@ internal class SearchBookViewHolder(
                     .with(context)
                     .load(item.volumeInfo.imageLinks.smallThumbnail)
                     .centerCrop()
+                    .error(ContextCompat.getDrawable(context, R.drawable.book_cover_not_found))
                     .into(thumbnail)
             }
 

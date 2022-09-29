@@ -1,6 +1,5 @@
 package com.google.book.ui.searchbook
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -28,7 +27,6 @@ internal class SearchBookViewModel(
     val bookList: LiveData<List<BookItem>> = bookListLiveData
 
     private val queryLiveData = MutableLiveData("")
-
     private val startIndexLiveData = MutableLiveData<Int>()
 
     val navigate = SingleLiveEvent<Navigate>()
@@ -36,7 +34,6 @@ internal class SearchBookViewModel(
     val loading = MutableLiveData(false)
 
     fun fetch(query: String) {
-        Log.d("Test", "fetch call $query")
         viewModelScope.launch {
             saveParam(query, 0)
             list.clear()

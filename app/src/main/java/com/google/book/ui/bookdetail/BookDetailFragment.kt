@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.google.book.R
@@ -48,6 +49,7 @@ internal class BookDetailFragment : BaseFragment<FragmentBookDetailBinding, Book
                         .with(requireContext())
                         .load(imgLink)
                         .centerCrop()
+                        .error(ContextCompat.getDrawable(requireContext(), R.drawable.book_cover_not_found))
                         .into(binding.thumbnail)
                 }
             }

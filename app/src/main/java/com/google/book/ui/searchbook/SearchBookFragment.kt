@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,7 +33,6 @@ internal class SearchBookFragment : BaseFragment<FragmentSearchBookBinding, Sear
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initViews()
         initViewModel()
     }
@@ -70,17 +70,20 @@ internal class SearchBookFragment : BaseFragment<FragmentSearchBookBinding, Sear
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
             override fun afterTextChanged(p0: Editable?) {
-                timer?.cancel()
-                timer = Timer()
-                timer?.schedule(
-                    object : TimerTask() {
-                        override fun run() {
-                            val query = p0.toString().trim()
-                            vm.fetch(query)
-                        }
-                    },
-                    DELAY
-                )
+                if (binding.searchBar.hasFocus()) {
+                    timer?.cancel()
+                    timer = Timer()
+                    timer?.schedule(
+                        object : TimerTask() {
+                            override fun run() {
+                                val query = p0.toString().trim()
+                                Log.d("Test", "addTextChangedListener $query")
+                                vm.fetch(query)
+                            }
+                        },
+                        DELAY
+                    )
+                }
             }
         })
 
@@ -93,44 +96,42 @@ internal class SearchBookFragment : BaseFragment<FragmentSearchBookBinding, Sear
 
     @SuppressLint("NotifyDataSetChanged")
     private fun initViewModel() {
-        with(vm) {
-            bookList.observe(viewLifecycleOwner) {
-                if (it.isEmpty()) {
-                    binding.rcBookList.gone()
-                    binding.results.gone()
-                    if (binding.searchBar.text.toString().isNotBlank()) binding.noResults.visible()
-                } else {
-                    binding.noResults.gone()
-                    binding.results.visible()
-                    binding.rcBookList.visible()
-                    searchBookListAdapter?.submitList(it)
-                    searchBookListAdapter?.notifyDataSetChanged()
-                }
+        vm.bookList.observe(viewLifecycleOwner) {
+            if (it.isEmpty()) {
+                binding.rcBookList.gone()
+                binding.results.gone()
+                if (binding.searchBar.text.toString().isNotBlank()) binding.noResults.visible()
+            } else {
+                binding.noResults.gone()
+                binding.results.visible()
+                binding.rcBookList.visible()
+                searchBookListAdapter?.submitList(it)
+                searchBookListAdapter?.notifyDataSetChanged()
             }
+        }
 
-            totalCount.observe(viewLifecycleOwner) {
-                binding.results.text = resources.getString(R.string.results, it.toString())
+        vm.totalCount.observe(viewLifecycleOwner) {
+            binding.results.text = resources.getString(R.string.results, it.toString())
+        }
+
+        vm.error.observe(viewLifecycleOwner) {
+            showErrorDialog()
+        }
+
+        vm.loading.observe(viewLifecycleOwner) {
+            binding.progress.apply {
+                if (it) visible() else gone()
             }
+        }
 
-            error.observe(viewLifecycleOwner) {
-                showErrorDialog()
-            }
-
-            loading.observe(viewLifecycleOwner) {
-                binding.progress.apply {
-                    if (it) visible() else gone()
-                }
-            }
-
-            navigate.observe(viewLifecycleOwner) {
-                when (it) {
-                    is SearchBookViewModel.Navigate.BookDetail -> {
-                        val action =
-                            SearchBookFragmentDirections.actionSearchBookFragmentToBookDetailFragment(
-                                it.bookId
-                            )
-                        findNavController().navigate(action)
-                    }
+        vm.navigate.observe(viewLifecycleOwner) {
+            when (it) {
+                is SearchBookViewModel.Navigate.BookDetail -> {
+                    val action =
+                        SearchBookFragmentDirections.actionSearchBookFragmentToBookDetailFragment(
+                            it.bookId
+                        )
+                    findNavController().navigate(action)
                 }
             }
         }
