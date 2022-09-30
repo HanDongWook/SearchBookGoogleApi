@@ -6,12 +6,10 @@ import kotlin.reflect.KClass
 
 
 class ApiProvider {
-    companion object {
-        const val BASE_URL = "https://www.googleapis.com/books/v1/"
-    }
+    private val baseUrl = "https://www.googleapis.com/books/v1/"
 
     fun <T : Any> create(kClass: KClass<T>): T = Retrofit.Builder()
-        .baseUrl(BASE_URL)
+        .baseUrl(baseUrl)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
         .create(kClass.java)
